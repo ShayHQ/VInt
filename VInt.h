@@ -28,6 +28,34 @@ public:
     VInt operator>>(size_t x);
     VInt operator<<(size_t x);
 
+
+    bool operator<(VInt& n);
+    bool operator<(VInt&& n);
+
+    bool operator>(VInt& n);
+    bool operator>(VInt&& n);
+
+    bool operator==(VInt& n);
+    bool operator==(VInt&& n);
+
+    bool operator<=(VInt n);
+    bool operator>=(VInt n);
+
+    operator bool() const{
+        for (size_t i = 0; i < mData.size(); i ++){
+            if (mData[i]){
+                return true;
+            }
+        }
+        return false;
+    }
+    operator unsigned int() const {
+        return *reinterpret_cast<const int *>(mData.data());
+    }
+    operator long long() const {
+        return *reinterpret_cast<const long long *>(mData.data());
+    }
+
 private:
     void negate();
     VInt maxVlaue();

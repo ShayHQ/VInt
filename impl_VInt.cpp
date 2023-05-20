@@ -179,3 +179,95 @@ VInt VInt::operator<<(size_t x){
     return res;
 }
 
+
+bool VInt::operator<(VInt& n){
+    if (mData.size() != n.mData.size()){
+        if (mData.size() < n.mData.size()){
+            for (size_t i = n.mData.size()-1; i > mData.size(); i --){
+                if (n.mData[i]){
+                    return true;
+                }
+            }
+        }else{
+            for (size_t i = mData.size()-1; i > n.mData.size(); i --){
+                if (mData[i]){
+                    return false;
+                }
+            }
+        }
+    }
+    for (size_t i = mData.size()-1; i >= 0 && i < mData.size(); i --){
+        if (n.mData[i] > mData[i]){
+            return true;
+        }
+    }
+    return false;
+}
+
+bool VInt::operator<(VInt&& n){
+    VInt tmp = n;
+    return *this < tmp;
+}
+
+bool VInt::operator>(VInt& n){
+    if (mData.size() != n.mData.size()){
+        if (mData.size() < n.mData.size()){
+            for (size_t i = n.mData.size()-1; i > mData.size(); i --){
+                if (n.mData[i]){
+                    return false;
+                }
+            }
+        }else{
+            for (size_t i = mData.size()-1; i > n.mData.size(); i --){
+                if (mData[i]){
+                    return true;
+                }
+            }
+        }
+    }
+    for (size_t i = mData.size()-1; i >= 0 && i < mData.size(); i --){
+        if (n.mData[i] < mData[i]){
+            return true;
+        }
+    }
+    return false;
+}
+bool VInt::operator>(VInt&& n){
+    VInt tmp = n;
+    return *this > tmp;
+}
+
+bool VInt::operator==(VInt& n){
+    std::size_t maxS = max(n.mData.size(), mData.size());
+    for (size_t i = 0; i < maxS-1; i ++){
+        if (mData[i] != n.mData[i]){
+            return false;
+        }
+    }
+    if (mData.size() > n.mData.size()){
+        for (size_t i = n.mData.size(); i < mData.size(); i ++){
+            if (mData[i]){
+                return false;
+            }
+        }
+    }else if (mData.size() < n.mData.size()){
+        for (size_t i = mData.size(); i < n.mData.size(); i ++){
+            if (n.mData[i]){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+bool VInt::operator==(VInt&& n){
+    VInt tmp = n;
+    return *this == tmp;
+}
+
+
+bool VInt::operator<=(VInt n){
+    return *this == n || *this < n;
+}
+bool VInt::operator>=(VInt n){
+    return *this == n || *this > n;
+}
