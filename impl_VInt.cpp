@@ -128,11 +128,12 @@ VInt& VInt::operator>>=(size_t x){
             }
         }
         if (x%8){
-            for (size_t i = 0; i < mData.size(); i ++){
+            for (size_t i = 0; i < mData.size()-1; i ++){
                 unsigned short n = *reinterpret_cast<unsigned short*>(mData.data()+i);
                 n >>= x%8;
                 mData[i] = static_cast<uchar>(n);
             }
+            mData[mData.size()-1] >>= x%8;
         }
     }
     return *this;
@@ -163,11 +164,19 @@ VInt& VInt::operator<<=(size_t x){
             }
         }
         if (x%8){
-            for (size_t i = mData.size()-2; i >= 0 && i <= mData.size()-1; i --){
+            size_t vecSize = mData.size();
+            unsigned short n = *reinterpret_cast<unsigned char*>(mData.data()+mData.size()-1);
+            n = (n << (x%8)) >> 8;
+            if (n){
+                mData.push_back(n);
+            }
+            
+            for (size_t i = vecSize-2; i >= 0 && i <= vecSize-1; i --){
                 unsigned short n = *reinterpret_cast<unsigned short*>(mData.data()+i);
                 n <<= x%8;
                 mData[i+1] = static_cast<uchar>(n >> 8);
             }
+            mData[0] <<= x%8;
         }
     }
     return *this;
