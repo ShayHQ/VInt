@@ -1,4 +1,9 @@
 #include "VInt.h"
+#include <limits>
+
+static_assert(sizeof(long double) > sizeof(size_t));
+using namespace std;
+
 
 VInt::VInt(int n) : mData(sizeof(int)){
     int *p = reinterpret_cast<int*>(mData.data());
@@ -105,3 +110,47 @@ VInt VInt::operator-(VInt&& n){
     res -= n;
     return res;
 }
+
+
+VInt& VInt::operator>>=(size_t x){
+    long double bitsCount = mData.size()*8;
+    if (bitsCount == x){
+        *this = 0;
+    }else if (x > 0){
+        size_t wholeBytesCount = x/8;
+        if (wholeBytesCount){
+            for (size_t i = wholeBytesCount; i < mData.size(); i++){
+                mData[i-wholeBytesCount] = mData[i];
+            }
+        }
+        if (x%8){
+            for (size_t i = 0; i < mData.size(); i ++){
+                unsigned short n = *reinterpret_cast<unsigned short*>(mData.data()+i);
+                n >>= x%8;
+                mData[i] = static_cast<uchar>(n);
+            }
+        }
+    }
+    return *this;
+}
+VInt& VInt::operator<<=(size_t x){
+    long double bitsCount = numeric_limits<size_t>::max()*8;
+    if (bitsCount == x){
+        *this = 0;
+    }else if (x > 0){
+        size_t wholeBytesCount = x/8;
+        // TODO
+    }
+    return *this;
+}
+VInt VInt::operator>>(size_t x){
+    VInt res(*this);
+    res >>= x;
+    return res;
+}
+VInt VInt::operator<<(size_t x){
+    VInt res(*this);
+    res <<= x;
+    return res;
+}
+
