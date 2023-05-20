@@ -151,7 +151,7 @@ VInt& VInt::operator<<=(size_t x){
             if (wholeBytesCount > reservedBytes){
                 mData.resize(mData.size() + wholeBytesCount - reservedBytes+1);
             }
-            for (size_t i = n-1; i >= 0; --i){
+            for (size_t i = n-1; i >= 0 && i <= n-1; --i){
                 mData[i+wholeBytesCount] = mData[i];
             }
             for (size_t i = 0; i < wholeBytesCount; i ++){
@@ -159,7 +159,7 @@ VInt& VInt::operator<<=(size_t x){
             }
         }
         if (x%8){
-            for (size_t i = mData.size()-2; i >= 0; i --){
+            for (size_t i = mData.size()-2; i >= 0 && i <= mData.size()-1; i --){
                 unsigned short n = *reinterpret_cast<unsigned short*>(mData.data()+i);
                 n <<= x%8;
                 mData[i+1] = static_cast<uchar>(n >> 8);
