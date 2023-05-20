@@ -10,11 +10,15 @@ VInt VInt::operator*(VInt&& n){
     res *= n;
     return res;
 }
-VInt& VInt::operator*=(VInt& n){
-    return *this;
-}
-VInt& VInt::operator*=(VInt&& n){
-    VInt tmp = n;
-    *this *= tmp;
+VInt& VInt::operator*=(VInt n){
+    VInt origin = *this;
+    *this = 0;
+    for (int i = 0; i < n.mData.size()*8; i ++){
+        if (n.mData[0] & 1){
+            *this += origin;
+        }
+        n >>= 1;
+        origin <<= 1;
+    }
     return *this;
 }
