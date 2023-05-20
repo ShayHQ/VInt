@@ -6,7 +6,7 @@ class VInt{
     std::vector<uchar> mData;
 public:
     VInt() : mData(sizeof(int)){}
-    VInt(int n);
+    VInt(unsigned int n);
     VInt(VInt& n);
     VInt(VInt&& n);
 
@@ -35,8 +35,7 @@ public:
     bool operator>(VInt& n);
     bool operator>(VInt&& n);
 
-    bool operator==(VInt& n);
-    bool operator==(VInt&& n);
+    bool operator==(VInt n);
 
     bool operator<=(VInt n);
     bool operator>=(VInt n);
@@ -50,10 +49,17 @@ public:
         return false;
     }
     operator unsigned int() const {
+        return *reinterpret_cast<const unsigned int *>(mData.data());
+    }
+    operator int() const {
         return *reinterpret_cast<const int *>(mData.data());
     }
-    operator long long() const {
-        return *reinterpret_cast<const long long *>(mData.data());
+    operator unsigned long long() const {
+        unsigned char res[sizeof( unsigned long long)] = {0};
+        for (size_t i = 0; i < mData.size(); i ++){
+            res[i] = mData[i];
+        }
+        return * reinterpret_cast<const unsigned long long*>(res);
     }
 
 private:

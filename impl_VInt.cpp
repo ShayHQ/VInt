@@ -1,12 +1,16 @@
 #include "VInt.h"
 #include <limits>
-
-static_assert(sizeof(long double) > sizeof(size_t));
 using namespace std;
 
+#ifdef WIN32
+#define int128 size_t
+#endif
+#ifdef __unix__
+#define int128 long double
+#endif
 
-VInt::VInt(int n) : mData(sizeof(int)){
-    int *p = reinterpret_cast<int*>(mData.data());
+VInt::VInt(unsigned int n) : mData(sizeof(int)){
+    unsigned int *p = reinterpret_cast<unsigned int*>(mData.data());
     *p = n;
 }
 
@@ -113,7 +117,7 @@ VInt VInt::operator-(VInt&& n){
 
 
 VInt& VInt::operator>>=(size_t x){
-    long double bitsCount = mData.size()*8;
+    int128 bitsCount = mData.size()*8;
     if (bitsCount == x){
         *this = 0;
     }else if (x > 0){
@@ -134,7 +138,7 @@ VInt& VInt::operator>>=(size_t x){
     return *this;
 }
 VInt& VInt::operator<<=(size_t x){
-    long double bitsCount = numeric_limits<size_t>::max()*8;
+    int128 bitsCount = numeric_limits<size_t>::max()*8;
     if (bitsCount == x){
         *this = 0;
     }else if (x > 0){
@@ -197,8 +201,8 @@ bool VInt::operator<(VInt& n){
         }
     }
     for (size_t i = mData.size()-1; i >= 0 && i < mData.size(); i --){
-        if (n.mData[i] > mData[i]){
-            return true;
+        if (n.mData[i] != mData[i]){
+            return n.mData[i] > mData[i];
         }
     }
     return false;
@@ -226,8 +230,8 @@ bool VInt::operator>(VInt& n){
         }
     }
     for (size_t i = mData.size()-1; i >= 0 && i < mData.size(); i --){
-        if (n.mData[i] < mData[i]){
-            return true;
+        if (n.mData[i] != mData[i]){
+            return n.mData[i] < mData[i];
         }
     }
     return false;
@@ -237,7 +241,7 @@ bool VInt::operator>(VInt&& n){
     return *this > tmp;
 }
 
-bool VInt::operator==(VInt& n){
+bool VInt::operator==(VInt n){
     std::size_t maxS = max(n.mData.size(), mData.size());
     for (size_t i = 0; i < maxS-1; i ++){
         if (mData[i] != n.mData[i]){
@@ -259,11 +263,6 @@ bool VInt::operator==(VInt& n){
     }
     return true;
 }
-bool VInt::operator==(VInt&& n){
-    VInt tmp = n;
-    return *this == tmp;
-}
-
 
 bool VInt::operator<=(VInt n){
     return *this == n || *this < n;
