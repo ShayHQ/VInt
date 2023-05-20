@@ -139,7 +139,32 @@ VInt& VInt::operator<<=(size_t x){
         *this = 0;
     }else if (x > 0){
         size_t wholeBytesCount = x/8;
-        // TODO
+        int n = mData.size(), reservedBytes = 0;
+        if (wholeBytesCount){
+            for (size_t i = n-1; i >= 0; i --){
+                if (mData[i]){
+                    break;
+                }
+                reservedBytes++;
+                n--;
+            }
+            if (wholeBytesCount > reservedBytes){
+                mData.resize(mData.size() + wholeBytesCount - reservedBytes+1);
+            }
+            for (size_t i = n-1; i >= 0; --i){
+                mData[i+wholeBytesCount] = mData[i];
+            }
+            for (size_t i = 0; i < wholeBytesCount; i ++){
+                mData[i] = 0;
+            }
+        }
+        if (x%8){
+            for (size_t i = mData.size()-2; i >= 0; i --){
+                unsigned short n = *reinterpret_cast<unsigned short*>(mData.data()+i);
+                n <<= x%8;
+                mData[i+1] = static_cast<uchar>(n >> 8);
+            }
+        }
     }
     return *this;
 }
