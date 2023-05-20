@@ -78,7 +78,7 @@ TEST_CASE("VInt instance & casting"){
             for (int j = 1; j <= 32; j ++){
                 a >>=1;
                 va >>=1;
-                VInt resVB = vb >> i;
+                VInt resVB = vb.operator>>(i);
                 REQUIRE(static_cast<unsigned long long>(va) == a);
                 REQUIRE(static_cast<unsigned long long>(resVB) == (b >> i));
             }
@@ -94,7 +94,7 @@ TEST_CASE("VInt instance & casting"){
             for (int j = 1; j <= 32; j ++){
                 a <<=1;
                 va <<=1;
-                VInt resVB = vb << i;
+                VInt resVB = vb.operator<<(i);
                 REQUIRE(static_cast<unsigned long long>(va) == a);
                 REQUIRE(static_cast<unsigned long long>(resVB) == (b << i));
             }
