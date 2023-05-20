@@ -28,6 +28,10 @@ public:
     VInt operator>>(size_t x);
     VInt operator<<(size_t x);
 
+    VInt operator*(VInt& n);
+    VInt operator*(VInt&& n);
+    VInt& operator*=(VInt& n);
+    VInt& operator*=(VInt&& n);
 
     bool operator<(VInt& n);
     bool operator<(VInt&& n);

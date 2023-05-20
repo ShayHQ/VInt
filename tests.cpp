@@ -64,4 +64,17 @@ TEST_CASE("VInt instance & casting"){
             REQUIRE(static_cast<unsigned long long>(vRes) == res);
         }
     }
+
+    for (unsigned int i = 0; i < 10; i ++){
+        testNum = to_string(i);
+        SECTION("VInt multiplication", testNum.c_str()){
+            unsigned long long a = dist(rng);
+            unsigned long long b = dist(rng);
+            VInt va = a, vb = b;
+            unsigned long long res = a * b;
+            VInt vRes = va * vb;
+            REQUIRE(static_cast<unsigned long long>(vRes) == res);
+        }
+    }
+
 }

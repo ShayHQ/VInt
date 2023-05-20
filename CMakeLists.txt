@@ -4,7 +4,7 @@ project(VARIABLE_INTEGER)
 
 
 add_subdirectory(Catch2)
-add_library(vintlib impl_VInt.cpp)
+add_library(vintlib impl_VInt.cpp impl_vint_mul.cpp)
 
 
 add_executable(tests tests.cpp)
