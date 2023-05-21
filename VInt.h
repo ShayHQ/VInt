@@ -43,7 +43,7 @@ public:
     bool operator<=(VInt n);
     bool operator>=(VInt n);
 
-    operator bool() const{
+    explicit operator bool() const{
         for (size_t i = 0; i < mData.size(); i ++){
             if (mData[i]){
                 return true;
@@ -51,13 +51,13 @@ public:
         }
         return false;
     }
-    operator unsigned int() const {
+    explicit operator unsigned int() const {
         return *reinterpret_cast<const unsigned int *>(mData.data());
     }
-    operator int() const {
+    explicit operator int() const {
         return *reinterpret_cast<const int *>(mData.data());
     }
-    operator unsigned long long() const {
+    explicit operator unsigned long long() const {
         unsigned char res[sizeof( unsigned long long)] = {0};
         size_t c = sizeof( unsigned long long);
 
