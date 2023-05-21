@@ -78,7 +78,7 @@ TEST_CASE("VInt instance & casting"){
             for (int j = 1; j <= 32; j ++){
                 a >>=1;
                 va >>=1;
-                VInt resVB = vb.operator>>(i);
+                VInt resVB = vb >> i;
                 REQUIRE(static_cast<unsigned long long>(va) == a);
                 REQUIRE(static_cast<unsigned long long>(resVB) == (b >> i));
             }
@@ -98,6 +98,45 @@ TEST_CASE("VInt instance & casting"){
                 REQUIRE(static_cast<unsigned long long>(va) == a);
                 REQUIRE(static_cast<unsigned long long>(resVB) == (b << i));
             }
+        }
+    }
+
+    for (unsigned int i = 0; i < GENERATE_COUNT; i ++){
+        testNum = to_string(i);
+        SECTION("VInt AND operator", testNum.c_str()){
+            unsigned long long a = dist(rng);
+            unsigned long long b = dist(rng);
+            VInt va = a;
+            VInt vb = b;
+            a &= b;
+            va &= vb;
+            REQUIRE(static_cast<unsigned long long>(va) == a);
+        }
+    }
+
+    for (unsigned int i = 0; i < GENERATE_COUNT; i ++){
+        testNum = to_string(i);
+        SECTION("VInt OR operator", testNum.c_str()){
+            unsigned long long a = dist(rng);
+            unsigned long long b = dist(rng);
+            VInt va = a;
+            VInt vb = b;
+            a |= b;
+            va |= vb;
+            REQUIRE(static_cast<unsigned long long>(va) == a);
+        }
+    }
+
+    for (unsigned int i = 0; i < GENERATE_COUNT; i ++){
+        testNum = to_string(i);
+        SECTION("VInt XOR operator", testNum.c_str()){
+            unsigned long long a = dist(rng);
+            unsigned long long b = dist(rng);
+            VInt va = a;
+            VInt vb = b;
+            a ^= b;
+            va ^= vb;
+            REQUIRE(static_cast<unsigned long long>(va) == a);
         }
     }
 

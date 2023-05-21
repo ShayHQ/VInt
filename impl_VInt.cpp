@@ -279,3 +279,48 @@ bool VInt::operator<=(VInt n){
 bool VInt::operator>=(VInt n){
     return *this == n || *this > n;
 }
+
+VInt& VInt::operator&=(VInt n){
+    size_t minS = min(mData.size(), n.mData.size());
+    mData.resize(minS);
+    n.mData.resize(minS);
+    for (size_t i = 0; i < minS; i ++){
+        mData[i] &= n.mData[i];
+    }
+    return *this;
+}
+VInt VInt::operator&(VInt n){
+    VInt res = *this;
+    res &= std::move(n);
+    return res;
+}
+
+VInt& VInt::operator|=(VInt n){
+    size_t maxS = max(mData.size(), n.mData.size());
+    mData.resize(maxS);
+    n.mData.resize(maxS);
+    for (size_t i = 0; i < maxS; i ++){
+        mData[i] |= n.mData[i];
+    }
+    return *this;
+}
+VInt VInt::operator|(VInt n){
+    VInt res = *this;
+    res |= std::move(n);
+    return res;
+}
+
+VInt& VInt::operator^=(VInt n){
+    size_t maxS = max(mData.size(), n.mData.size());
+    mData.resize(maxS);
+    n.mData.resize(maxS);
+    for (size_t i = 0; i < maxS; i ++){
+        mData[i] ^= n.mData[i];
+    }
+    return *this;
+}
+VInt VInt::operator^(VInt n){
+    VInt res = *this;
+    res ^= std::move(n);
+    return res;
+}
